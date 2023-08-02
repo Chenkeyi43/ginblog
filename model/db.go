@@ -4,25 +4,39 @@ package model
 
 import (
 	"fmt"
+	"ginblog/utils"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
+	"gorm.io/gorm/schema"
 	"os"
 )
 
 func InitDb() {
 	// 参考 https://github.com/go-sql-driver/mysql#dsn-data-source-name 获取详情
-	dsn := "user:pass@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&parseTime=True&loc=Local"
-	db, err := gorm.Open(mysql.New(mysql.Config{
-		DSN:                       "gorm:gorm@tcp(127.0.0.1:3306)/gorm?charset=utf8&parseTime=True&loc=Local", // DSN data source name
-		DefaultStringSize:         256,                                                                        // string 类型字段的默认长度
-		DisableDatetimePrecision:  true,                                                                       // 禁用 datetime 精度，MySQL 5.6 之前的数据库不支持
-		DontSupportRenameIndex:    true,                                                                       // 重命名索引时采用删除并新建的方式，MySQL 5.7 之前的数据库和 MariaDB 不支持重命名索引
-		DontSupportRenameColumn:   true,                                                                       // 用 `change` 重命名列，MySQL 8 之前的数据库和 MariaDB 不支持重命名列
-		SkipInitializeWithVersion: false,                                                                      // 根据当前 MySQL 版本自动配置
-	}), &gorm.Config{})
+	//dsn := "user:pass@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&parseTime=True&loc=Local"
+	dns := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+		utils.DbUser,
+		utils.DbPassWord,
+		utils.DbHost,
+		utils.DbPort,
+		utils.DbName,
+	)
+	db, err := gorm.Open(mysql.Open(dns), &gorm.Config{
+		// grom 日志模式
+		Logger: logger.Default.LogMode(logger.Silent),
+		//	禁用外键约束
+		DisableForeignKeyConstraintWhenMigrating: true,
+		// 禁用默认事务（提高运行速度）
+		SkipDefaultTransaction: true,
+		NamingStrategy: schema.NamingStrategy{
+			// 使用单数表名，启用该选项，此时，`User` 的表名应该是 `user`
+			SingularTable: true, // use singular table name, table for `User` would be `user` with this option enabled
+		},
+	})
+
 	if err != nil {
-		fmt.Println("数据库连接失败，请检查参数")
+		fmt.Println("连接数据库失败，请检查参数，", err)
 		os.Exit(1)
 	}
-
 }

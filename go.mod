@@ -11,4 +11,5 @@ require (
 	github.com/go-sql-driver/mysql v1.7.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
+	gopkg.in/ini.v1 v1.67.0 // indirect
 )
