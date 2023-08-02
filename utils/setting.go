@@ -1,4 +1,4 @@
-package main
+package utils
 
 import (
 	"fmt"
@@ -14,7 +14,7 @@ var (
 	Db         string
 	DbHost     string
 	DbPort     string
-	Dbuser     string
+	DbUser     string
 	DbPassWord string
 	DbName     string
 
@@ -55,9 +55,5 @@ func LoadDatabase(cfg *ini.File) {
 }
 
 func LoadQiniu(cfg *ini.File) {
-
-}
-
-func main() {
 
 }
