@@ -10,6 +10,7 @@ import (
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
 	"os"
+	"time"
 )
 
 func InitDb() {
@@ -39,4 +40,18 @@ func InitDb() {
 		fmt.Println("连接数据库失败，请检查参数，", err)
 		os.Exit(1)
 	}
+
+	// 迁移数据表 用于自动迁移您的 schema（数据库的组织和结构），保持您的 schema 是最新的
+	db.AutoMigrate(&User{}, &Category{}, &Article{})
+	//	创建数据库连接池
+	sqlDB, err := db.DB()
+
+	// SetMaxIdleConns sets the maximum number of connections in the idle connection pool.
+	sqlDB.SetMaxIdleConns(10)
+
+	// SetMaxOpenConns sets the maximum number of open connections to the database.
+	sqlDB.SetMaxOpenConns(100)
+
+	// SetConnMaxLifetime sets the maximum amount of time a connection may be reused.
+	sqlDB.SetConnMaxLifetime(time.Hour)
 }
