@@ -13,6 +13,9 @@ import (
 	"time"
 )
 
+var db *gorm.DB
+var err error
+
 func InitDb() {
 	// 参考 https://github.com/go-sql-driver/mysql#dsn-data-source-name 获取详情
 	//dsn := "user:pass@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&parseTime=True&loc=Local"
@@ -23,7 +26,7 @@ func InitDb() {
 		utils.DbPort,
 		utils.DbName,
 	)
-	db, err := gorm.Open(mysql.Open(dns), &gorm.Config{
+	db, err = gorm.Open(mysql.Open(dns), &gorm.Config{
 		// grom 日志模式
 		Logger: logger.Default.LogMode(logger.Silent),
 		//	禁用外键约束
@@ -44,7 +47,7 @@ func InitDb() {
 	// 迁移数据表 用于自动迁移您的 schema（数据库的组织和结构），保持您的 schema 是最新的
 	db.AutoMigrate(&User{}, &Category{}, &Article{})
 	//	创建数据库连接池
-	sqlDB, err := db.DB()
+	sqlDB, _ := db.DB()
 
 	// SetMaxIdleConns sets the maximum number of connections in the idle connection pool.
 	sqlDB.SetMaxIdleConns(10)

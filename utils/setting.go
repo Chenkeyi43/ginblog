@@ -48,6 +48,8 @@ func LoadServer(cfg *ini.File) {
 
 func LoadDatabase(cfg *ini.File) {
 	Db = cfg.Section("database").Key("Db").MustString("debug")
+	DbUser = cfg.Section("database").Key("DbUser").MustString("debug")
+
 	DbHost = cfg.Section("database").Key("DbHost").MustString("debug")
 	DbPort = cfg.Section("database").Key("DbPort").MustString("debug")
 	DbPassWord = cfg.Section("database").Key("DbPassWord").MustString("debug")
