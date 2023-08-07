@@ -5,6 +5,7 @@ import (
 	"ginblog/utils/errmsg"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 )
 
 // 查询用户是否存在
@@ -34,6 +35,29 @@ func AddUser(c *gin.Context) {
 // 查询用户列表
 func GetUsers(c *gin.Context) {
 	//model.GetUserS()
+	// 从Get 请求中获取相关参数
+	pageSize, _ := strconv.Atoi(c.Query("pagesize"))
+	pageNum, _ := strconv.Atoi(c.Query("pagenum"))
+	username := c.Query("username")
+
+	switch {
+	case pageSize >= 100:
+		pageSize = 100
+	case pageSize <= 0:
+		pageSize = 10
+	}
+
+	if pageNum == 0 {
+		pageNum = 1
+	}
+	users, total := model.GetUserS(username, pageSize, pageNum)
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":  errmsg.SUCCSE,
+		"data":    users,
+		"total":   total,
+		"message": errmsg.GetErrMsg(errmsg.SUCCSE),
+	})
 }
 
 // 编辑用户
