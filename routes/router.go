@@ -10,6 +10,9 @@ func InitRouter() {
 	gin.SetMode(utils.AppMode)
 	r := gin.Default()
 
+	/*
+		后台管理接口
+	*/
 	auth := r.Group("api/v1")
 	{
 		// 用户模块的路由接口
@@ -19,14 +22,26 @@ func InitRouter() {
 		// 修改密码
 		auth.PUT("admin/changepw/:id", v1.ChangeUserPassword)
 		//	分类模块的路由接口
+		auth.GET("admin/cagtegory", v1.GetCate)
+		auth.POST("category/add", v1.AddCategory)
+		auth.PUT("category/:id", v1.EditCate)
+		auth.DELETE("category/:id", v1.DeleteCate)
 
 		//	文章模块的路由接口
+
 	}
+	/*
+		前端展示页面接口
+	*/
 	route := r.Group("api/v1")
 	{
+		// 用户信息模块
 		route.POST("user/add", v1.AddUser)
 		route.GET("user/:id", v1.GetUserInfo)
 		route.GET("users", v1.GetUsers)
+		//	 文章分类信息模块
+		route.GET("category", v1.GetCate)
+		route.GET("category/:id", v1.GetCateInfo)
 	}
 	// 定义一个没有默认中间件的路由
 	//r := gin.New()
