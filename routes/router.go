@@ -28,6 +28,11 @@ func InitRouter() {
 		auth.DELETE("category/:id", v1.DeleteCate)
 
 		//	文章模块的路由接口
+		auth.GET("admin/article/info/:id", v1.GetArtInfo)
+		auth.GET("admin/article", v1.GetArt)
+		auth.POST("article/add", v1.AddArticle)
+		auth.PUT("article/:id", v1.EditArt)
+		auth.DELETE("article/:id", v1.DeleteArt)
 
 	}
 	/*
@@ -42,6 +47,11 @@ func InitRouter() {
 		//	 文章分类信息模块
 		route.GET("category", v1.GetCate)
 		route.GET("category/:id", v1.GetCateInfo)
+
+		//	 文章模块
+		route.GET("article", v1.GetArt)
+		route.GET("article/list/:id", v1.GetCateArt)
+		route.GET("article/info/:id", v1.GetArtInfo)
 	}
 	// 定义一个没有默认中间件的路由
 	//r := gin.New()
