@@ -27,6 +27,7 @@ func AddUser(c *gin.Context) {
 
 // 查询单个用户
 func GetUserInfo(c *gin.Context) {
+	// c.Param 解析路由参数
 	id, _ := strconv.Atoi(c.Param("id"))
 	var maps = make(map[string]interface{})
 	data, code := model.GetUser(id)
@@ -44,7 +45,7 @@ func GetUserInfo(c *gin.Context) {
 // 查询用户列表
 func GetUsers(c *gin.Context) {
 	//model.GetUserS()
-	// 从Get 请求中获取相关参数
+	// 查询url 请求字符串参数
 	pageSize, _ := strconv.Atoi(c.Query("pagesize"))
 	pageNum, _ := strconv.Atoi(c.Query("pagenum"))
 	username := c.Query("username")
