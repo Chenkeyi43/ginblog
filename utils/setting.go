@@ -18,11 +18,11 @@ var (
 	DbPassWord string
 	DbName     string
 
-	Zone        int
-	AccessKey   string
-	SecrtKey    string
-	Bucket      string
-	QiniuServer string
+	Zone       int
+	AccessKey  string
+	SecretKey  string
+	Bucket     string
+	QiniuSever string
 )
 
 func init() {
@@ -57,5 +57,9 @@ func LoadDatabase(cfg *ini.File) {
 }
 
 func LoadQiniu(cfg *ini.File) {
-
+	Zone = cfg.Section("qiniu").Key("Zone").MustInt(1)
+	AccessKey = cfg.Section("qiniu").Key("AccessKey").String()
+	SecretKey = cfg.Section("qiniu").Key("SecretKey").String()
+	Bucket = cfg.Section("qiniu").Key("Bucket").String()
+	QiniuSever = cfg.Section("qiniu").Key("QiniuSever").String()
 }
