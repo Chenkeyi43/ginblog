@@ -40,8 +40,10 @@ func UpLoadFile(file multipart.File, fileSize int64) (string, int) {
 }
 
 func setConfig() storage.Config {
+	region, _ := storage.GetRegion(AccessKey, Bucket)
 	cfg := storage.Config{
-		Zone: selectZone(Zone),
+		Region: region,
+		Zone:   selectZone(Zone),
 		// 上传是否使用CDN上传加速
 		UseCdnDomains: false,
 		UseHTTPS:      false,

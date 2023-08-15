@@ -61,6 +61,9 @@ func InitRouter() {
 		route.GET("article", v1.GetArt)
 		route.GET("article/list/:id", v1.GetCateArt)
 		route.GET("article/info/:id", v1.GetArtInfo)
+		// 登录控制模块
+		route.POST("login", v1.Login)
+		route.POST("loginfront", v1.LoginFront)
 	}
 	// 定义一个没有默认中间件的路由
 	//r := gin.New()
