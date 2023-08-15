@@ -2,6 +2,7 @@ package routes
 
 import (
 	v1 "ginblog/api/v1"
+	"ginblog/middleware"
 	"ginblog/utils"
 	"github.com/gin-gonic/gin"
 )
@@ -14,6 +15,8 @@ func InitRouter() {
 		后台管理接口
 	*/
 	auth := r.Group("api/v1")
+	// 注册中间件
+	auth.Use(middleware.JwtToken())
 	{
 		// 用户模块的路由接口
 		auth.GET("admin/users", v1.GetUsers)

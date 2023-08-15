@@ -123,7 +123,7 @@ func JwtToken() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-
+		// 请求上下文中设置 username
 		c.Set("username", claims)
 		c.Next()
 
