@@ -14,7 +14,7 @@ func AddCategory(c *gin.Context) {
 	_ = c.ShouldBindJSON(&category)
 	code := model.CheckoutCategory(category.Name)
 	if code == errmsg.SUCCSE {
-		model.CreateCate(&category)
+		code = model.CreateCate(&category)
 	}
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,

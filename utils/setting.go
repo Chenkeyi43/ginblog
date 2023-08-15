@@ -43,7 +43,7 @@ func init() {
 func LoadServer(cfg *ini.File) {
 	AppMode = cfg.Section("server").Key("AppMode").MustString("debug")
 	HttpPort = cfg.Section("server").Key("HttpPort").MustString("debug")
-	JwtKey = cfg.Section("server").Key("JwtKey").MustString("debug")
+	JwtKey = cfg.Section("server").Key("JwtKey").MustString("89js82js72")
 }
 
 func LoadDatabase(cfg *ini.File) {
