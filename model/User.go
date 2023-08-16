@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"ginblog/utils/errmsg"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
@@ -12,16 +13,14 @@ type User struct {
 	gorm.Model
 	Username string `gorm:"type:varchar(20);not null" json:"username,omitempty"`
 	Password string `gorm:"type:varchar(200);not null" json:"password,omitempty"`
-	Role     int    `gorm:"type:int;not null" json:"role,omitempty"`
+	Role     int    `gorm:"type:int;not null" json:"role"`
 }
 
 // 查询用户是否存在
 func CheckUser(name string) (code int) {
 	var user User
-	result := db.Select("id").Where("username = ?", name).First(&user)
-	if result.Error != nil {
-		return errmsg.ERROR
-	}
+	db.Select("id").Where("username = ?", name).First(&user)
+
 	if user.ID > 0 {
 		return errmsg.ERROR_USERNAME_USED
 	}
@@ -46,6 +45,7 @@ func CheckUpUser(id int, username string) int {
 func CreateUser(data *User) int {
 	err := db.Create(&data).Error
 	if err != nil {
+		fmt.Println(err)
 		return errmsg.ERROR
 	}
 	return errmsg.SUCCSE
@@ -140,7 +140,7 @@ func CheckLogin(username string, password string) (User, int) {
 	var user User
 	var PasswordErr error
 
-	db.Where("username = >", username).First(&user)
+	db.Where("username = ?", username).First(&user)
 	if user.ID == 0 {
 		return user, errmsg.ERROR_USER_NOT_EXIST
 	}

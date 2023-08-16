@@ -15,7 +15,7 @@ var SecretKey = utils.SecretKey
 var Bucket = utils.Bucket
 var ImgUrl = utils.QiniuSever
 
-// 上传文件函数
+// UpLoadFile 上传文件函数
 func UpLoadFile(file multipart.File, fileSize int64) (string, int) {
 	putPolicy := storage.PutPolicy{
 		Scope: Bucket,
@@ -27,24 +27,22 @@ func UpLoadFile(file multipart.File, fileSize int64) (string, int) {
 
 	putExtra := storage.PutExtra{}
 
-	// 构建表单上传的对象
 	formUploader := storage.NewFormUploader(&cfg)
 	ret := storage.PutRet{}
+
 	err := formUploader.PutWithoutKey(context.Background(), &ret, upToken, file, fileSize, &putExtra)
 	if err != nil {
-
 		return "", errmsg.ERROR
 	}
+
 	url := ImgUrl + ret.Key
 	return url, errmsg.SUCCSE
 }
 
 func setConfig() storage.Config {
-	region, _ := storage.GetRegion(AccessKey, Bucket)
 	cfg := storage.Config{
-		Region: region,
-		Zone:   selectZone(Zone),
-		// 上传是否使用CDN上传加速
+		Region:        &storage.ZoneHuadong,
+		Zone:          selectZone(Zone),
 		UseCdnDomains: false,
 		UseHTTPS:      false,
 	}

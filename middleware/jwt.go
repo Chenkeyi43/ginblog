@@ -35,7 +35,7 @@ type MyClaims struct {
 
 // 生成 token
 func (j *JWT) CreateToken(claims MyClaims) (string, error) {
-	token := jwt.NewWithClaims(jwt.SigningMethodES256, claims)
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString(j.JwtKey)
 }
 
@@ -44,6 +44,7 @@ func (j *JWT) ParserToken(tokenString string) (*MyClaims, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &MyClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return j.JwtKey, nil
 	})
+
 	if err != nil {
 		if ve, ok := err.(*jwt.ValidationError); ok {
 			if ve.Errors&jwt.ValidationErrorMalformed != 0 {
@@ -61,8 +62,9 @@ func (j *JWT) ParserToken(tokenString string) (*MyClaims, error) {
 		if claims, ok := token.Claims.(*MyClaims); ok && token.Valid {
 			return claims, nil
 		}
+		return nil, TokenInvalid
 	}
-	return nil, err
+	return nil, TokenInvalid
 }
 
 // jwt 中间件
@@ -123,9 +125,8 @@ func JwtToken() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		// 请求上下文中设置 username
+
 		c.Set("username", claims)
 		c.Next()
-
 	}
 }
